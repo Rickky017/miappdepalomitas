@@ -1,5 +1,4 @@
-HTML
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -68,18 +67,18 @@ HTML
             <h2 class="text-2xl font-semibold text-gray-800 border-b-2 border-green-500 pb-2">Menú</h2>
 
             <!-- Card de Palomitas Pequeñas -->
-            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md space-x-4">
+            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md">
                 <div class="flex-grow">
                     <h3 class="text-lg font-bold text-gray-800">Palomitas Pequeñas</h3>
-                    <p class="text-green-600 font-semibold text-xl mt-1">$25</p>
+                    <p class="text-green-600 font-semibold text-xl mt-1">$24</p>
                 </div>
-                <button onclick="addToCart({ name: 'Palomitas Pequeñas', price: 25, id: 1 })" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                <button onclick="addToCart({ name: 'Palomitas Pequeñas', price: 24, id: 1 })" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
                     Añadir
                 </button>
             </div>
 
             <!-- Card de Palomitas Medianas -->
-            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md space-x-4">
+            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md">
                 <div class="flex-grow">
                     <h3 class="text-lg font-bold text-gray-800">Palomitas Medianas</h3>
                     <p class="text-green-600 font-semibold text-xl mt-1">$50</p>
@@ -90,7 +89,7 @@ HTML
             </div>
 
             <!-- Card de Palomitas Grandes -->
-            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md space-x-4">
+            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md">
                 <div class="flex-grow">
                     <h3 class="text-lg font-bold text-gray-800">Palomitas Grandes</h3>
                     <p class="text-green-600 font-semibold text-xl mt-1">$75</p>
@@ -101,7 +100,7 @@ HTML
             </div>
 
             <!-- Card de Refresco -->
-            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md space-x-4">
+            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md">
                 <div class="flex-grow">
                     <h3 class="text-lg font-bold text-gray-800">Refresco</h3>
                     <p class="text-green-600 font-semibold text-xl mt-1">$50</p>
@@ -112,23 +111,12 @@ HTML
             </div>
 
             <!-- Card de Agua -->
-            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md space-x-4">
+            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md">
                 <div class="flex-grow">
                     <h3 class="text-lg font-bold text-gray-800">Agua</h3>
                     <p class="text-green-600 font-semibold text-xl mt-1">$25</p>
                 </div>
                 <button onclick="addToCart({ name: 'Agua', price: 25, id: 5 })" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
-                    Añadir
-                </button>
-            </div>
-            
-            <!-- Card de Cerveza -->
-            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md space-x-4">
-                <div class="flex-grow">
-                    <h3 class="text-lg font-bold text-gray-800">Cerveza Presidente Light</h3>
-                    <p class="text-green-600 font-semibold text-xl mt-1">$200</p>
-                </div>
-                <button onclick="addToCart({ name: 'Cerveza Presidente Light', price: 200, id: 6 })" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
                     Añadir
                 </button>
             </div>
@@ -139,7 +127,7 @@ HTML
             <button id="viewCartBtn" onclick="showCart()" class="bg-orange-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-orange-600 transition-colors w-full">
                 Ver Carrito (<span id="cartCount">0</span>)
             </button>
-            <button id="placeOrderBtn" onclick="showCheckout()" class="bg-green-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-green-600 transition-colors w-full">
+            <button id="placeOrderBtn" onclick="placeOrder()" class="bg-green-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-green-600 transition-colors w-full">
                 Hacer Pedido
             </button>
         </div>
@@ -165,8 +153,8 @@ HTML
             </div>
 
             <div class="mt-6 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-                <button onclick="showCheckout()" class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition-colors w-full">
-                    Continuar al Pago
+                <button onclick="placeOrder()" class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition-colors w-full">
+                    Confirmar Pedido
                 </button>
                 <button onclick="clearCart()" class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 transition-colors w-full">
                     Vaciar Carrito
@@ -175,43 +163,19 @@ HTML
         </div>
     </div>
 
-    <!-- Modal de Checkout (inicialmente oculto) -->
-    <div id="checkoutModal" class="modal">
+    <!-- Modal de Confirmación de Pedido (inicialmente oculto) -->
+    <div id="orderModal" class="modal">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold text-gray-800">Detalles del Pedido</h2>
-                <button onclick="closeModal('checkoutModal')" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+                <h2 class="text-2xl font-bold text-green-700">¡Pedido Realizado!</h2>
+                <button onclick="closeModal('orderModal')" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
             </div>
-            
-            <div class="mb-4">
-                <p class="text-lg font-bold text-gray-800 flex justify-between">
-                    <span>Total a Pagar:</span>
-                    <span id="checkoutTotal">$0</span>
-                </p>
+            <p class="text-gray-600 mb-4">Gracias por tu compra. Te confirmaremos pronto.</p>
+            <div id="orderSummary" class="bg-gray-100 p-4 rounded-lg">
+                <!-- Resumen del pedido se insertará aquí -->
             </div>
-            
-            <div class="space-y-4">
-                <!-- Nuevo campo para el nombre del cliente -->
-                <div>
-                    <label for="nameInput" class="block text-sm font-semibold text-gray-700">Tu Nombre</label>
-                    <input type="text" id="nameInput" placeholder="Ej: Juan Pérez" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500">
-                </div>
-                <div>
-                    <label for="locationInput" class="block text-sm font-semibold text-gray-700">¿Dónde se encuentra?</label>
-                    <input type="text" id="locationInput" placeholder="Ej: Cerca de los columpios grandes" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500">
-                </div>
-                <div>
-                    <label for="paymentInput" class="block text-sm font-semibold text-gray-700">¿Con cuánto va a pagar?</label>
-                    <input type="number" id="paymentInput" placeholder="Monto" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500">
-                </div>
-            </div>
-            
-            <div id="checkoutError" class="text-red-500 text-sm mt-2 hidden"></div>
-
-            <div class="mt-6">
-                <button onclick="sendOrderViaWhatsApp()" class="bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition-colors w-full">
-                    Enviar Pedido por WhatsApp
-                </button>
+            <div class="mt-6 text-center">
+                <p class="text-lg font-bold text-green-600">¡Disfruta de tu día en el parque!</p>
             </div>
         </div>
     </div>
@@ -222,10 +186,13 @@ HTML
 
         // Función para añadir un item al carrito
         function addToCart(item) {
+            // Revisa si el item ya está en el carrito
             const existingItem = cart.find(cartItem => cartItem.id === item.id);
             if (existingItem) {
+                // Si existe, incrementa la cantidad
                 existingItem.quantity += 1;
             } else {
+                // Si no existe, añade el item con cantidad 1
                 cart.push({ ...item, quantity: 1 });
             }
             updateCartCount();
@@ -244,7 +211,7 @@ HTML
             alertBox.classList.remove('hidden');
             setTimeout(() => {
                 alertBox.classList.add('hidden');
-            }, 3000);
+            }, 3000); // Oculta la alerta después de 3 segundos
         }
 
         // Función para mostrar el modal del carrito
@@ -254,6 +221,7 @@ HTML
             const cartTotalElement = document.getElementById('cartTotal');
             let total = 0;
             
+            // Limpia el contenido del carrito antes de actualizar
             cartItemsContainer.innerHTML = '';
             
             if (cart.length === 0) {
@@ -263,7 +231,7 @@ HTML
                     const itemTotal = item.price * item.quantity;
                     total += itemTotal;
                     const itemElement = document.createElement('div');
-                    itemElement.className = 'flex items-center justify-between bg-white p-3 rounded-lg shadow-sm';
+                    itemElement.className = 'flex justify-between items-center bg-white p-3 rounded-lg shadow-sm';
                     itemElement.innerHTML = `
                         <div>
                             <span class="font-semibold text-gray-800">${item.name}</span>
@@ -279,24 +247,6 @@ HTML
             cartModal.style.display = 'flex';
         }
 
-        // Función para mostrar el modal de checkout
-        function showCheckout() {
-            if (cart.length === 0) {
-                const checkoutError = document.getElementById('checkoutError');
-                checkoutError.textContent = 'Tu carrito está vacío. Agrega productos primero.';
-                checkoutError.classList.remove('hidden');
-                return;
-            }
-
-            const checkoutModal = document.getElementById('checkoutModal');
-            const checkoutTotalElement = document.getElementById('checkoutTotal');
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            
-            checkoutTotalElement.textContent = `$${total}`;
-            closeModal('cartModal');
-            checkoutModal.style.display = 'flex';
-        }
-
         // Función para vaciar el carrito
         function clearCart() {
             cart = [];
@@ -309,62 +259,51 @@ HTML
             document.getElementById(modalId).style.display = 'none';
         }
 
-        // Función para enviar el pedido por WhatsApp
-        function sendOrderViaWhatsApp() {
-            const nameInput = document.getElementById('nameInput').value.trim();
-            const locationInput = document.getElementById('locationInput').value.trim();
-            const paymentInput = document.getElementById('paymentInput').value;
-            const checkoutError = document.getElementById('checkoutError');
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-            if (!nameInput) {
-                checkoutError.textContent = 'Por favor, ingresa tu nombre.';
-                checkoutError.classList.remove('hidden');
-                return;
-            }
-
-            if (!locationInput) {
-                checkoutError.textContent = 'Por favor, ingresa tu ubicación.';
-                checkoutError.classList.remove('hidden');
-                return;
-            }
-
-            const paymentAmount = parseFloat(paymentInput);
-            if (isNaN(paymentAmount) || paymentAmount < total) {
-                checkoutError.textContent = 'El monto de pago debe ser mayor o igual al total.';
-                checkoutError.classList.remove('hidden');
+        // Función para procesar el pedido y mostrar el modal de confirmación
+        function placeOrder() {
+            if (cart.length === 0) {
+                // No hay items, no hacemos nada.
                 return;
             }
             
-            checkoutError.classList.add('hidden');
-            const change = paymentAmount - total;
-
-            // Construye el mensaje para WhatsApp
-            let message = "🎉 *¡Nuevo Pedido!* 🎉\n\n";
-            message += `*Cliente:* ${nameInput}\n`;
-            message += "*Detalles del pedido:*\n";
+            const orderModal = document.getElementById('orderModal');
+            const orderSummaryContainer = document.getElementById('orderSummary');
+            
+            // Construye el resumen del pedido
+            let orderSummaryHtml = '<h3 class="font-bold text-gray-800 mb-2">Resumen de tu pedido:</h3>';
+            let total = 0;
+            
             cart.forEach(item => {
-                message += `${item.name} (${item.quantity}x) - $${item.price * item.quantity}\n`;
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                orderSummaryHtml += `
+                    <p class="flex justify-between text-gray-700">
+                        <span>${item.name} (${item.quantity}x)</span>
+                        <span class="font-semibold">$${itemTotal}</span>
+                    </p>
+                `;
             });
-            message += "\n--------------------\n";
-            message += `*Total:* $${total}\n`;
-            message += `*Pago con:* $${paymentAmount}\n`;
-            message += `*Cambio a entregar:* $${change}\n`;
-            message += `*Ubicación del cliente:* ${locationInput}\n`;
-            message += "\n¡A preparar el pedido! 🍿";
-
-            const phoneNumber = "18098936842";
-
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
-
-            window.open(whatsappUrl, '_blank');
-
+            
+            orderSummaryHtml += `
+                <div class="mt-4 pt-2 border-t border-gray-300">
+                    <p class="flex justify-between font-bold text-lg text-gray-800">
+                        <span>Total:</span>
+                        <span>$${total}</span>
+                    </p>
+                </div>
+            `;
+            
+            orderSummaryContainer.innerHTML = orderSummaryHtml;
+            
+            // Cierra el modal del carrito si está abierto y muestra el de confirmación
+            closeModal('cartModal');
+            orderModal.style.display = 'flex';
+            
+            // En un caso real, aquí enviarías el pedido a un servidor.
+            // Para esta demo, simplemente vaciamos el carrito.
             cart = [];
             updateCartCount();
-            closeModal('checkoutModal');
         }
     </script>
 </body>
 </html>
-

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palomitas en el Parque</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdf4;
+        }
+        /* Estilo para la animación de la alerta */
+        .alert-box {
+            animation: fadeInOut 5s forwards;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(-20px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); display: none; }
+        }
+        /* Estilos para el modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex flex-col items-center p-4 min-h-screen">
+
+    <div id="app-container" class="bg-white p-6 md:p-8 rounded-2xl shadow-xl w-full max-w-lg">
+
+        <header class="text-center mb-6">
+            <h1 class="text-4xl font-bold text-green-700">Palomitas en el Parque</h1>
+            <p class="text-gray-600 mt-2">¡Haz tu pedido y nosotros te lo llevamos!</p>
+        </header>
+
+        <div id="alert" class="alert-box fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg hidden">
+            Producto añadido al carrito.
+        </div>
+
+        <main id="menu" class="space-y-6">
+            <h2 class="text-2xl font-semibold text-gray-800 border-b-2 border-green-500 pb-2">Menú</h2>
+
+            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md space-x-4">
+                <div class="flex-grow">
+                    <h3 class="text-lg font-bold text-gray-800">Algodón de Azúcar</h3>
+                    <p class="text-green-600 font-semibold text-xl mt-1">$50</p>
+                </div>
+                <button onclick="addToCart({ name: 'Algodón de Azúcar', price: 50, id: 7 })" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                    Añadir
+                </button>
+            </div>
+
+            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md space-x-4">
+                <div class="flex-grow">
+                    <h3 class="text-lg font-bold text-gray-800">Palomitas Medianas</h3>
+                    <p class="text-green-600 font-semibold text-xl mt-1">$50</p>
+                </div>
+                <button onclick="addToCart({ name: 'Palomitas Medianas', price: 50, id: 2 })" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                    Añadir
+                </button>
+            </div>
+
+            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md space-x-4">
+                <div class="flex-grow">
+                    <h3 class="text-lg font-bold text-gray-800">Palomitas Grandes</h3>
+                    <p class="text-green-600 font-semibold text-xl mt-1">$75</p>
+                </div>
+                <button onclick="addToCart({ name: 'Palomitas Grandes', price: 75, id: 3 })" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                    Añadir
+                </button>
+            </div>
+
+            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md space-x-4">
+                <div class="flex-grow">
+                    <h3 class="text-lg font-bold text-gray-800">Refresco</h3>
+                    <p class="text-green-600 font-semibold text-xl mt-1">$50</p>
+                </div>
+                <button onclick="addToCart({ name: 'Refresco', price: 50, id: 4 })" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                    Añadir
+                </button>
+            </div>
+
+            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md space-x-4">
+                <div class="flex-grow">
+                    <h3 class="text-lg font-bold text-gray-800">Agua</h3>
+                    <p class="text-green-600 font-semibold text-xl mt-1">$25</p>
+                </div>
+                <button onclick="addToCart({ name: 'Agua', price: 25, id: 5 })" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                    Añadir
+                </button>
+            </div>
+            
+            <div class="menu-item bg-gray-100 p-4 rounded-xl flex items-center justify-between shadow-md space-x-4">
+                <div class="flex-grow">
+                    <h3 class="text-lg font-bold text-gray-800">Gatorade</h3>
+                    <p class="text-green-600 font-semibold text-xl mt-1">$50</p>
+                </div>
+                <button onclick="addToCart({ name: 'Gatorade', price: 50, id: 6 })" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                    Añadir
+                </button>
+            </div>
+        </main>
+
+        <div class="sticky bottom-4 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mt-8">
+            <button id="viewCartBtn" onclick="showCart()" class="bg-orange-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-orange-600 transition-colors w-full">
+                Ver Carrito (<span id="cartCount">0</span>)
+            </button>
+            <button id="placeOrderBtn" onclick="showCheckout()" class="bg-green-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-green-600 transition-colors w-full">
+                Hacer Pedido
+            </button>
+        </div>
+    </div>
+
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">Tu Carrito</h2>
+                <button onclick="closeModal('cartModal')" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+            </div>
+            
+            <div id="cartItems" class="space-y-4 max-h-60 overflow-y-auto pr-2">
+                </div>
+            
+            <div class="mt-4 pt-4 border-t-2 border-gray-200">
+                <p class="text-xl font-bold text-gray-800 flex justify-between">
+                    <span>Total:</span>
+                    <span id="cartTotal">$0</span>
+                </p>
+            </div>
+
+            <div class="mt-6 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+                <button onclick="showCheckout()" class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition-colors w-full">
+                    Continuar al Pago
+                </button>
+                <button onclick="clearCart()" class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 transition-colors w-full">
+                    Vaciar Carrito
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">Detalles del Pedido</h2>
+                <button onclick="closeModal('checkoutModal')" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-lg font-bold text-gray-800 flex justify-between">
+                    <span>Total a Pagar:</span>
+                    <span id="checkoutTotal">$0</span>
+                </p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label for="nameInput" class="block text-sm font-semibold text-gray-700">Tu Nombre</label>
+                    <input type="text" id="nameInput" placeholder="Ej: Juan Pérez" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="locationInput" class="block text-sm font-semibold text-gray-700">¿Dónde se encuentra?</label>
+                    <input type="text" id="locationInput" placeholder="Ej: Cerca de los columpios grandes" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="paymentInput" class="block text-sm font-semibold text-gray-700">¿Con cuánto va a pagar?</label>
+                    <input type="number" id="paymentInput" placeholder="Monto" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500">
+                </div>
+            </div>
+            
+            <div id="checkoutError" class="text-red-500 text-sm mt-2 hidden"></div>
+
+            <div class="mt-6">
+                <button onclick="sendOrderViaWhatsApp()" class="bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition-colors w-full">
+                    Enviar Pedido por WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Array para almacenar los items del carrito
+        let cart = [];
+
+        // Función para añadir un item al carrito
+        function addToCart(item) {
+            const existingItem = cart.find(cartItem => cartItem.id === item.id);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...item, quantity: 1 });
+            }
+            updateCartCount();
+            showAlert();
+        }
+
+        // Función para actualizar el contador del carrito en el botón
+        function updateCartCount() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+        }
+
+        // Función para mostrar una alerta de éxito temporal
+        function showAlert() {
+            const alertBox = document.getElementById('alert');
+            alertBox.classList.remove('hidden');
+            setTimeout(() => {
+                alertBox.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Función para mostrar el modal del carrito
+        function showCart() {
+            const cartModal = document.getElementById('cartModal');
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartTotalElement = document.getElementById('cartTotal');
+            let total = 0;
+            
+            cartItemsContainer.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p class="text-center text-gray-500">Tu carrito está vacío.</p>';
+            } else {
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'flex items-center justify-between bg-white p-3 rounded-lg shadow-sm';
+                    itemElement.innerHTML = `
+                        <div>
+                            <span class="font-semibold text-gray-800">${item.name}</span>
+                            <span class="text-sm text-gray-500">(${item.quantity}x)</span>
+                        </div>
+                        <span class="font-bold text-green-600">$${itemTotal}</span>
+                    `;
+                    cartItemsContainer.appendChild(itemElement);
+                });
+            }
+            
+            cartTotalElement.textContent = `$${total}`;
+            cartModal.style.display = 'flex';
+        }
+
+        // Función para mostrar el modal de checkout
+        function showCheckout() {
+            if (cart.length === 0) {
+                const checkoutError = document.getElementById('checkoutError');
+                checkoutError.textContent = 'Tu carrito está vacío. Agrega productos primero.';
+                checkoutError.classList.remove('hidden');
+                return;
+            }
+
+            const checkoutModal = document.getElementById('checkoutModal');
+            const checkoutTotalElement = document.getElementById('checkoutTotal');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            checkoutTotalElement.textContent = `$${total}`;
+            closeModal('cartModal');
+            checkoutModal.style.display = 'flex';
+        }
+
+        // Función para vaciar el carrito
+        function clearCart() {
+            cart = [];
+            updateCartCount();
+            closeModal('cartModal');
+        }
+
+        // Función para cerrar un modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Función para enviar el pedido por WhatsApp
+        function sendOrderViaWhatsApp() {
+            const nameInput = document.getElementById('nameInput').value.trim();
+            const locationInput = document.getElementById('locationInput').value.trim();
+            const paymentInput = document.getElementById('paymentInput').value;
+            const checkoutError = document.getElementById('checkoutError');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            if (!nameInput) {
+                checkoutError.textContent = 'Por favor, ingresa tu nombre.';
+                checkoutError.classList.remove('hidden');
+                return;
+            }
+
+            if (!locationInput) {
+                checkoutError.textContent = 'Por favor, ingresa tu ubicación.';
+                checkoutError.classList.remove('hidden');
+                return;
+            }
+
+            const paymentAmount = parseFloat(paymentInput);
+            if (isNaN(paymentAmount) || paymentAmount < total) {
+                checkoutError.textContent = 'El monto de pago debe ser mayor o igual al total.';
+                checkoutError.classList.remove('hidden');
+                return;
+            }
+            
+            checkoutError.classList.add('hidden');
+            const change = paymentAmount - total;
+
+            // Construye el mensaje para WhatsApp
+            let message = "🎉 *¡Nuevo Pedido!* 🎉\n\n";
+            message += `*Cliente:* ${nameInput}\n`;
+            message += "*Detalles del pedido:*\n";
+            cart.forEach(item => {
+                message += `${item.name} (${item.quantity}x) - $${item.price * item.quantity}\n`;
+            });
+            message += "\n--------------------\n";
+            message += `*Total:* $${total}\n`;
+            message += `*Pago con:* $${paymentAmount}\n`;
+            message += `*Cambio a entregar:* $${change}\n`;
+            message += `*Ubicación del cliente:* ${locationInput}\n`;
+            message += "\n¡A preparar el pedido! 🍿";
+
+            const phoneNumber = "18496322671";
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
+
+            window.open(whatsappUrl, '_blank');
+
+            // Limpia el carrito y cierra el modal después de enviar
+            cart = [];
+            updateCartCount();
+            closeModal('checkoutModal');
+        }
+    </script>
+</body>
+</html>

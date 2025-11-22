@@ -168,10 +168,21 @@
                             Limpiar Cotización
                         </button>
                     </div>
+                    
+                    <div class="p-6 bg-blue-50 rounded-b-xl border-t border-blue-200">
+                        <h3 class="text-lg font-bold text-blue-700 mb-3">Enviar Cotización</h3>
+                        <input type="text" id="client-name" placeholder="Nombre del Cliente (Opcional)" class="w-full p-2 mb-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+                        <input type="tel" id="client-whatsapp" placeholder="Número de WhatsApp (Ej: 8098936842)" class="w-full p-2 mb-4 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+                        
+                        <button id="send-whatsapp-button" class="w-full py-3 bg-green-500 text-white font-extrabold text-lg rounded-lg hover:bg-green-600 transition duration-150 shadow-lg flex items-center justify-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                                <path d="M12.001 2c-5.522 0-9.999 4.477-9.999 9.999s4.477 9.999 9.999 9.999h-.001c1.472 0 2.92-.32 4.237-.936l1.371.492 4.076 1.46c.307.11.642.164.978.164.254 0 .507-.031.751-.093.593-.15 1.054-.611 1.204-1.205.062-.244.093-.497.093-.751 0-.336-.054-.67-.164-.978l-1.46-4.076-.492-1.371c.616-1.317.936-2.765.936-4.237 0-5.522-4.477-9.999-9.999-9.999zm4.722 13.911c.209.132.417.228.625.291.208.062.404.088.588.088.077 0 .15-.008.219-.015s.138-.016.208-.031c.224-.055.448-.152.673-.292.224-.138.403-.314.536-.525.132-.212.198-.445.198-.711 0-.154-.031-.322-.093-.504-.062-.182-.178-.372-.348-.571-.17-.2-.395-.452-.676-.755-.281-.303-.615-.694-1.004-1.171-.389-.478-.857-.962-1.403-1.455-.546-.492-1.127-1.002-1.743-1.528-.615-.525-1.209-.997-1.782-1.417-.572-.42-1.077-.736-1.514-.946-.436-.21-.861-.314-1.272-.314-.146 0-.322.022-.53.065-.208.044-.403.116-.588.215-.184.1-.349.231-.497.393s-.273.344-.367.558c-.093.214-.14.453-.14.717 0 .285.077.587.23.905.153.318.39.697.711 1.137.32.44.721.954 1.203 1.542.482.589 1.05 1.267 1.704 2.035.655.767 1.341 1.63 2.059 2.587.719.957 1.391 1.879 2.016 2.766.625.887 1.189 1.674 1.694 2.361z"/>
+                            </svg>
+                            <span>Enviar por WhatsApp</span>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </main>
-    </div>
 
 <script>
     // Variable global para almacenar el carrito de cotización
@@ -718,7 +729,96 @@
         monthlyPaymentDisplay.textContent = formatter.format(monthlyPayment);
     }
 
+// --- Funciones de WhatsApp ---
 
+    // Función para construir y enviar el mensaje de WhatsApp
+    function sendQuoteByWhatsApp() {
+        const clientNameInput = document.getElementById('client-name');
+        const clientWhatsappInput = document.getElementById('client-whatsapp');
+
+        const clientName = clientNameInput.value.trim() || 'Estimado(a) Cliente';
+        const clientWhatsapp = clientWhatsappInput.value.replace(/[^0-9]/g, ''); // Limpiar solo dígitos
+
+        // 1. Construir Encabezado
+        let message = `*COTIZACIÓN ROYAL PRESTIGE HILAGO SRL*\n\n`;
+        message += `Hola, ${clientName}. Aquí está el resumen de tu cotización:\n\n`;
+
+        // 2. Lista de Productos
+        if (quote.items.length > 0) {
+            message += `*🛒 Productos Añadidos:*\n`;
+            quote.items.forEach(item => {
+                const isGift = item.product.category === 'Regalo';
+                const priceValue = parseFloat(item.product.price) || 0;
+                const totalItemPrice = priceValue * item.quantity;
+                const priceText = isGift ? `(🎁 Regalo: ${formatter.format(priceValue)})` : formatter.format(totalItemPrice);
+                
+                message += `- ${item.product.name} (x${item.quantity}): ${priceText}\n`;
+            });
+            message += `\n`;
+        } else {
+            message += `_La cotización está vacía. Añade productos para ver el detalle._\n\n`;
+        }
+
+        // 3. Resumen de Precios
+        const subtotal = parseFloat(subtotalDisplay.textContent.replace(/[$,]/g, '').trim()) || 0;
+        const discountAmount = parseFloat(discountAmountDisplay.textContent.replace(/[$,-]/g, '').trim()) || 0;
+        const total = parseFloat(totalDisplay.textContent.replace(/[$,]/g, '').trim()) || 0;
+
+        message += `*📊 Resumen Financiero:*\n`;
+        message += `Subtotal: ${formatter.format(subtotal)}\n`;
+        message += `Descuento Aplicado (${quote.discountPercentage}%): -${formatter.format(discountAmount)}\n`;
+        message += `\n*TOTAL A PAGAR (CAPITAL): ${formatter.format(total)}*\n`;
+        
+        // 4. Control de Regalo (Si aplica)
+        const totalGiftValue = parseFloat(giftTotalDisplay.textContent.replace(/[$,]/g, '').trim()) || 0;
+        if (totalGiftValue > 0) {
+             const maxGiftValue = parseFloat(giftMaxDisplay.textContent.replace(/[$,]/g, '').trim()) || 0;
+             const isOverLimit = totalGiftValue > maxGiftValue;
+
+             message += `\n*🎁 Control de Regalo:*\n`;
+             message += `Valor Total de Regalos: ${formatter.format(totalGiftValue)}\n`;
+             message += `Máximo Permitido (10%): ${formatter.format(maxGiftValue)}\n`;
+             if (isOverLimit) {
+                const exceeded = totalGiftValue - maxGiftValue;
+                message += `🚨 *¡ADVERTENCIA! Excede por: ${formatter.format(exceeded)}*\n`;
+             } else {
+                 message += `✅ Dentro del límite.\n`;
+             }
+        }
+        
+        // 5. Financiamiento (Si aplica un total > 0)
+        if (total > 0 && total !== quote.initialPayment) {
+            const amountFinanced = parseFloat(amountFinancedDisplay.textContent.replace(/[$,]/g, '').trim()) || 0;
+            const monthlyPayment = parseFloat(monthlyPaymentDisplay.textContent.replace(/[$,]/g, '').trim()) || 0;
+            const initialPaymentPercent = (quote.initialPayment / total) * 100;
+
+            message += `\n*💳 Opciones de Financiamiento:*\n`;
+            message += `Pago Inicial: ${formatter.format(quote.initialPayment)} (${initialPaymentPercent.toFixed(1)}%)\n`;
+            message += `Monto a Financiar: ${formatter.format(amountFinanced)}\n`;
+            message += `Plazo: ${quote.termMonths} meses\n`;
+            message += `Tasa de Interés Anual: ${quote.interestRate}%\n`;
+            message += `\n*PAGO MENSUAL ESTIMADO: ${formatter.format(monthlyPayment)}*\n`;
+            
+            if (amountFinanced > 0 && amountFinanced < total && initialPaymentPercent < MINIMUM_INITIAL_PAYMENT_PERCENTAGE * 100) {
+                 message += `\n🚨 *Nota: El Pago Inicial mínimo debe ser del ${MINIMUM_INITIAL_PAYMENT_PERCENTAGE * 100}% del Total a Pagar.*\n`;
+            }
+        } else if (total > 0 && total === quote.initialPayment && total !== 0) {
+            message += `\n*Pagado al 100% de Contado. No aplica Financiamiento.*\n`;
+        }
+
+        // 6. Pie de Página
+        message += `\n_Para más detalles o dudas, comunícate con Hilago SRL al 809-893-6842._\n`;
+
+        // Codificar el mensaje para la URL
+        const encodedMessage = encodeURIComponent(message);
+        
+        // Determinar el número de destino y el enlace
+        const whatsappNumber = clientWhatsapp.length >= 10 ? clientWhatsapp : '8098936842'; // Usar el número del cliente si es válido, sino usar el de Hilago.
+        const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+        // Abrir el enlace en una nueva pestaña
+        window.open(whatsappLink, '_blank');
+    }
     // --- Inicialización ---
     document.addEventListener('DOMContentLoaded', () => {
         // Inicializar la lista de productos y filtros
@@ -756,6 +856,9 @@
         // Listener para el botón de limpiar
         clearQuoteButton.addEventListener('click', clearQuote);
         
+        // Listener para el botón de enviar por WhatsApp
+        document.getElementById('send-whatsapp-button').addEventListener('click', sendQuoteByWhatsApp);
+
         // Llama a calculateQuote para que todos los displays se inicialicen correctamente
         calculateQuote();
     });
